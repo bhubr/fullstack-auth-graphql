@@ -21,8 +21,17 @@ const typeDefs = gql`
     role: String
   }
 
+  type LoginResponse {
+    jwt: String
+    user: User
+  }
+
   type Query {
     movies: [Movie]
+  }
+
+  type Mutation {
+    login(email: String, password: String): LoginResponse
   }
 `;
 

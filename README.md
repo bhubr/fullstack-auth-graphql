@@ -16,10 +16,10 @@ docker run -p 27017:27017 -d mongo:4.4
 4. Setup Apollo Server
 5. Écriture resolvers :
 
+    * login utilisateur
     * récupérer liste films
     * ajouter film
     * register utilisateur
-    * login utilisateur
 6. Gestion CORS
 
 ## Front

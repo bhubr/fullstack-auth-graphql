@@ -18,6 +18,7 @@ async function main() {
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context: ({ res }) => ({ res })
   });
 
   await server.start();
