@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const { ApolloServer } = require('apollo-server-express');
-const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
+const { ApolloServerPluginDrainHttpServer, AuthenticationError } = require('apollo-server-core');
 const express = require('express');
 const http = require('http');
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
@@ -20,7 +21,23 @@ async function main() {
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }) => {
+
+      // check JWT
+      const { jwt: token } = req.cookies;
+      if (token) {
+        const jwtSecret = process.env.JWT_SECRET || 'secret';
+        try {
+          const jwtPayload = jwt.verify(token, jwtSecret);
+          const { iat, exp, ...user } = jwtPayload;
+          return { req, res, user }; 
+        } catch (err) {
+          throw new AuthenticationError('Not authenticated');
+        }
+      }
+
+      return { req, res }; 
+    },
   });
 
   await server.start();
