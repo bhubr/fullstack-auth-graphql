@@ -1,5 +1,13 @@
 # Authentification Node/React/GraphQL
 
+## :warning: utilisation de MongoDB
+
+Si vous n'avez pas Mongo installé localement, vous pouvez le lancer avec Docker :
+
+```
+docker run -p 27017:27017 -d mongo:4.4
+```
+
 ## Back
 
 1. Init repo et appli backend
