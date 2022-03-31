@@ -18,13 +18,20 @@ async function main() {
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    context: ({ res }) => ({ res })
+    context: ({ res }) => ({ res }),
   });
 
   await server.start();
   server.applyMiddleware({
     app,
     path: '/',
+    cors: {
+      origin: [
+        process.env.REACT_APP_ORIGIN || 'http://localhost:3000',
+        'https://studio.apollographql.com'
+      ],
+      credentials: true
+    }
   });
 
   await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve));
