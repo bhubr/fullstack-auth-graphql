@@ -28,6 +28,7 @@ const typeDefs = gql`
 
   type Query {
     movies: [Movie]
+    currentUser: User
   }
 
   type Mutation {

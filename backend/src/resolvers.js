@@ -10,6 +10,17 @@ const resolvers = {
     movies: async() => {
       return MovieModel.find({});
     },
+    currentUser: async(parent, args, context) => {
+      const { jwt: token } = context.req.cookies;
+      if (!token) {
+        throw new AuthenticationError('Not authenticated');
+      }
+      const jwtSecret = process.env.JWT_SECRET || 'secret';
+      const jwtPayload = jwt.verify(token, jwtSecret);
+      const { iat, exp, ...user } = jwtPayload;
+
+      return user;
+    }
   },
   Mutation: {
     login: async(parent, args, context) => {

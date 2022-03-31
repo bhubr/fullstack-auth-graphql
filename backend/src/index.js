@@ -3,6 +3,7 @@ const { ApolloServer } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 const express = require('express');
 const http = require('http');
+const cookieParser = require('cookie-parser');
 
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
@@ -12,13 +13,14 @@ async function main() {
   console.log('connected to mongodb');
 
   const app = express();
+  app.use(cookieParser());
   const httpServer = http.createServer(app);
 
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    context: ({ res }) => ({ res }),
+    context: ({ req, res }) => ({ req, res }),
   });
 
   await server.start();
