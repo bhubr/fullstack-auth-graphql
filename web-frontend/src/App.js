@@ -1,23 +1,32 @@
-import logo from './logo.svg';
+import { gql, useQuery } from '@apollo/client';
 import './App.css';
 
+const GET_MOVIES = gql`
+  query GetMovies {
+    movies {
+      _id
+      title
+      picture
+      releaseYear
+    }
+  }
+`;
+
 function App() {
+  const { loading, error, data } = useQuery(GET_MOVIES);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        data.movies.map(movie => (
+          <div key={movie._id}>
+            <h3>{movie.title}</h3>
+            <img alt={movie.title} src={movie.picture} />
+          </div>
+        ))
+      }
     </div>
   );
 }
