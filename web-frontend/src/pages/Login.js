@@ -25,13 +25,11 @@ function Login() {
 
   const handleChange = e => {
     const { name, value } = e.target;
-    console.log(name, value)
     setFormData(({ ...formData, [name]: value }));
   }
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(formData);
     sendLogin({ variables: formData });
   }
 
